@@ -9,12 +9,16 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
+          width: double.infinity,
+          color: Colors.black,
           child: Column(
-        children: [
-          Text('Hi'),
-          Text('Mayank'),
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(onPressed: () {}, child: Text("Login")),
+              ElevatedButton(onPressed: () {}, child: Text("Register"))
+            ],
+          )),
     );
   }
 }
