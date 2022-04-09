@@ -7,14 +7,28 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-          child: Column(
-        children: [
-          Text('Hi'),
-          Text('Mayank'),
-        ],
-      )),
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+            width: double.infinity,
+            color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    child: Text('Login')),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    child: Text('Register')),
+              ],
+            )),
+      ),
     );
   }
 }
