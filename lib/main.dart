@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:call_app/screens/login.dart';
+import 'package:call_app/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:call_app/screens/welcome_screen.dart';
 
@@ -14,9 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: WelcomeScreen(),
-      ),
+      routes: {
+        '/': (context) => const WelcomeScreen(),
+        '/login': (context) => const Login(),
+        '/register': (context) => const Register(),
+      },
+      initialRoute: '/',
     );
   }
 }
