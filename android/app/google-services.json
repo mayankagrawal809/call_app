@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "477087544029",
+    "project_id": "call-app-bde5c",
+    "storage_bucket": "call-app-bde5c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477087544029:android:3e7b819be5ac1751d8e134",
+        "android_client_info": {
+          "package_name": "com.example.call_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "477087544029-q8v51hu3j97cn9df5drvaso15085u9ch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwHiZDmILA1ysjzrSfh64cGgOT3s3dUZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "477087544029-q8v51hu3j97cn9df5drvaso15085u9ch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

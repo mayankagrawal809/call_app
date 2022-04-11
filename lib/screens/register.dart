@@ -8,7 +8,47 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.black,
         body: SafeArea(
-            child: Container(child: Text('Welcome to Register Screen'))));
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            Text(
+              "Register",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 50,
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              width: 320,
+              height: 40,
+              child: TextField(
+                cursorColor: Colors.red,
+                onChanged: (String) {},
+                decoration: InputDecoration.collapsed(hintText: "enter email"),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+              width: 320,
+              height: 40,
+              child: TextField(
+                cursorColor: Colors.red,
+                onChanged: (String) {},
+                decoration:
+                    InputDecoration.collapsed(hintText: "enter password"),
+              ),
+            ),
+            TextButton(onPressed: () {}, child: Text("Register"))
+          ],
+        )));
   }
 }
