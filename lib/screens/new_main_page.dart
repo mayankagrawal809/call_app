@@ -1,10 +1,10 @@
 // ignore_for_file: avoid_print, prefer_const_constructors
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:sdp_transform/sdp_transform.dart';
+import 'dart:developer';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
     RTCSessionDescription description =
         await _peerConnection!.createOffer({'offerToReceiveVideo': 1});
     var session = parse(description.sdp.toString());
-    print(json.encode(session));
+    log(json.encode(session));
     _offer = true;
 
     _peerConnection!.setLocalDescription(description);
@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await _peerConnection!.createAnswer({'offerToReceiveVideo': 1});
 
     var session = parse(description.sdp.toString());
-    print(json.encode(session));
+    log(json.encode(session));
 
     _peerConnection!.setLocalDescription(description);
   }
