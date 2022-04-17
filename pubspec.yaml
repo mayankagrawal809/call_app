@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.3.13
   flutter_webrtc: ^0.8.5
+  sdp_transform: ^0.3.2
 
 dev_dependencies:
   flutter_test:

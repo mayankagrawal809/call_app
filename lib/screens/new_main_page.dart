@@ -1,27 +1,31 @@
-// ignore_for_file: avoid_print, unused_field, prefer_const_constructors, unused_element
+// ignore_for_file: avoid_print, prefer_const_constructors
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'dart:convert';
 import 'package:sdp_transform/sdp_transform.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MyHomePageState extends State<MyHomePage> {
   final _localVideoRenderer = RTCVideoRenderer();
   final _remoteVideoRenderer = RTCVideoRenderer();
   final sdpController = TextEditingController();
+
   bool _offer = false;
 
   RTCPeerConnection? _peerConnection;
   MediaStream? _localStream;
 
-  void initRenderers() async {
+  initRenderer() async {
     await _localVideoRenderer.initialize();
     await _remoteVideoRenderer.initialize();
   }
@@ -33,10 +37,12 @@ class _MainPageState extends State<MainPage> {
         'facingMode': 'user',
       }
     };
-    MediaStream mediaStream =
+
+    MediaStream stream =
         await navigator.mediaDevices.getUserMedia(mediaConstraints);
 
-    _localVideoRenderer.srcObject = mediaStream;
+    _localVideoRenderer.srcObject = stream;
+    return stream;
   }
 
   _createPeerConnecion() async {
@@ -45,6 +51,7 @@ class _MainPageState extends State<MainPage> {
         {"url": "stun:stun.l.google.com:19302"},
       ]
     };
+
     final Map<String, dynamic> offerSdpConstraints = {
       "mandatory": {
         "OfferToReceiveAudio": true,
@@ -52,7 +59,7 @@ class _MainPageState extends State<MainPage> {
       },
       "optional": [],
     };
-    // late MediaStream _localStream;
+
     _localStream = await _getUserMedia();
 
     RTCPeerConnection pc =
@@ -63,9 +70,9 @@ class _MainPageState extends State<MainPage> {
     pc.onIceCandidate = (e) {
       if (e.candidate != null) {
         print(json.encode({
-          'candidate': e.candidate,
-          'sdpMid': e.sdpMid,
-          'sdpMlineIndex': e.sdpMLineIndex
+          'candidate': e.candidate.toString(),
+          'sdpMid': e.sdpMid.toString(),
+          'sdpMlineIndex': e.sdpMLineIndex,
         }));
       }
     };
@@ -78,7 +85,7 @@ class _MainPageState extends State<MainPage> {
       print('addStream: ' + stream.id);
       _remoteVideoRenderer.srcObject = stream;
     };
-    _peerConnection = pc;
+
     return pc;
   }
 
@@ -88,6 +95,7 @@ class _MainPageState extends State<MainPage> {
     var session = parse(description.sdp.toString());
     print(json.encode(session));
     _offer = true;
+
     _peerConnection!.setLocalDescription(description);
   }
 
@@ -124,9 +132,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  void initState() async {
-    initRenderers();
-    await _createPeerConnecion();
+  void initState() {
+    initRenderer();
+    _createPeerConnecion().then((pc) {
+      _peerConnection = pc;
+    });
     // _getUserMedia();
     super.initState();
   }
@@ -141,59 +151,57 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 200,
-                  width: 200,
-                  key: Key('local'),
-                  margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                  decoration: BoxDecoration(color: Colors.black),
-                  child: RTCVideoView(_localVideoRenderer),
-                ),
-                Container(
-                  height: 200,
-                  width: 150,
-                  key: Key('remote'),
-                  margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
-                  decoration: BoxDecoration(color: Colors.grey),
-                  child: RTCVideoView(_remoteVideoRenderer),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                TextField(
-                  controller: sdpController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 2,
-                  maxLength: TextField.noMaxLength,
-                ),
-                ElevatedButton(
-                  onPressed: _createOffer,
-                  child: const Text("Offer"),
-                ),
-                ElevatedButton(
-                  onPressed: _createAnswer,
-                  child: const Text("Answer"),
-                ),
-                ElevatedButton(
-                  onPressed: _setRemoteDescription,
-                  child: const Text("Set Remote Description"),
-                ),
-                ElevatedButton(
-                  onPressed: _addCandidate,
-                  child: const Text("Set Candidate"),
-                ),
-              ],
-            )
-          ],
-        ),
+        body: SafeArea(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                height: 200,
+                width: 200,
+                key: Key('local'),
+                margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                decoration: BoxDecoration(color: Colors.black),
+                child: RTCVideoView(_localVideoRenderer),
+              ),
+              Container(
+                height: 200,
+                width: 150,
+                key: Key('remote'),
+                margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                decoration: BoxDecoration(color: Colors.grey),
+                child: RTCVideoView(_remoteVideoRenderer),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              TextField(
+                controller: sdpController,
+                keyboardType: TextInputType.multiline,
+                maxLines: 2,
+                maxLength: TextField.noMaxLength,
+              ),
+              ElevatedButton(
+                onPressed: _createOffer,
+                child: const Text("Offer"),
+              ),
+              ElevatedButton(
+                onPressed: _createAnswer,
+                child: const Text("Answer"),
+              ),
+              ElevatedButton(
+                onPressed: _setRemoteDescription,
+                child: const Text("Set Remote Description"),
+              ),
+              ElevatedButton(
+                onPressed: _addCandidate,
+                child: const Text("Set Candidate"),
+              ),
+            ],
+          )
+        ],
       ),
-    );
+    ));
   }
 }
